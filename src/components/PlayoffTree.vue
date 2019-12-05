@@ -1,7 +1,7 @@
 <template>
     <div class="playoff-node">
         <ul v-if="children">
-            <li v-for="child in children" :key="child.name">
+            <li v-for="(child, index) in children" :key="index">
                 <PlayoffTree
                     :name="child.name"
                     :children="child.children"/>
