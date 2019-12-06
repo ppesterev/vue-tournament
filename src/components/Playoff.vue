@@ -47,8 +47,6 @@
             },
 
             itemWidth() {
-                ///////sdsdfgdghxghfs
-
                 let containerWidth = this.$refs["container"].clientWidth;
                 return containerWidth / (this.depth + 1);
             },
@@ -59,10 +57,8 @@
         },
 
         watch: {
-            participantCount() {
-                
+            participantCount() {                
                 this.playoffData = this.generateNodes(this.depth);
-                // this.participantCount = Math.pow(2, this.depth);
             }
         },
 
@@ -102,7 +98,6 @@
     }
 
     .warning {
-        /* background: pink; */
         color: red;
         opacity: 0.7;
         padding: 3px;
