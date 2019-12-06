@@ -1,20 +1,25 @@
 <template>
     <div class="playoff-node">
-        <ul v-if="children">
-            <li v-for="(child, index) in children" :key="index">
+        <ul v-if="node.children">
+            <li v-for="(child, index) in node.children" :key="index">
                 <PlayoffTree
-                    :name="child.name"
-                    :children="child.children"/>
+                    :node="child"
+                    :item-width="itemWidth"/>
             </li>
         </ul>
-        <div class="playoff-node-name">{{ name }}</div>
+        <!-- <div class="playoff-node-name" :style="{width: itemWidth - 10 + 'px'}">{{ node.name }}</div> -->
+        <input 
+            type="text"
+            class="playoff-node-name"
+            v-model="node.name"
+            :style="{width: itemWidth - 10 + 'px'}">
     </div>
 </template>
 
 <script>
     export default {
         name: 'PlayoffTree',
-        props: ['name', 'children']
+        props: ['node', 'itemWidth']
     }
 </script>
 
@@ -34,10 +39,11 @@
 }
 
 .playoff-node-name {
-    width: 100px;
-    height: 20px;
+    /* width: 100px; */
+    height: 25px;
     margin: 10px 5px;
     padding: 3px;
+    box-sizing: border-box;
     border: 1px solid black;
     border-radius: 5px;
 }
