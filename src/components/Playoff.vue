@@ -8,7 +8,11 @@
                 <span class="warning" v-if="!countIsValid">Bracket size must be a power of 2.</span>
             </label>
         </div>
-        <div ref="container">
+        <div
+            ref="container"
+            class="playoff-container"
+            @wheel.prevent="zoom"
+            :style="{transform: scaleStyle}">
             <PlayoffTree 
                 v-if="playoffData"
                 :node="playoffData"
@@ -38,6 +42,15 @@
                     node.children[1] = this.generateNodes(depth - 1);
                 }
                 return node;
+            },
+
+            zoom(evt) {
+                if(evt.deltaY > 0 && this.scaleIndex > 0) {
+                    this.scaleIndex--;
+                }
+                else if(evt.deltaY < 0 && this.scaleIndex < this.scaleFactors.length - 1) {
+                    this.scaleIndex++;
+                }
             }
         },
 
@@ -53,6 +66,10 @@
 
             countIsValid() {
                 return this.participantCount === Math.pow(2, this.depth);
+            },
+
+            scaleStyle() {
+                return 'scale(' + this.scaleFactors[this.scaleIndex] + ')';
             }
         },
 
@@ -65,7 +82,10 @@
         data() {
             return {
                 participantCount: 8,
-                playoffData: null
+                playoffData: null,
+
+                scaleFactors: [0.2, 0.3, 0.5, 0.75, 1, 1.25, 1.5, 2, 3],
+                scaleIndex: 4
             }
         },
 
@@ -77,8 +97,12 @@
 
 <style>
     .playoff {
-        width: 600px;
         padding: 10px;
+    }
+
+    .playoff-container {
+        width: 1000px;
+        transform-origin: 0 0;
     }
 
     .playoff,

@@ -29,6 +29,7 @@
     position: relative;
     display: flex;
     align-items: center;
+    /* background: #eeeeee; */
 }
 
 .playoff-node > ul {
@@ -50,7 +51,7 @@
 
 .playoff-node li:first-child::after,
 .playoff-node li:last-child::after{
-  z-index: -5;
+  /* z-index: -5; */
   content: "";
   position: absolute;
   right: 0;
