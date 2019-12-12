@@ -22,12 +22,12 @@
 </template>
 
 <script>
-    import PlayoffTree from './PlayoffTree.vue'
+    import TournamentTree from './TournamentTree.vue'
 
     export default {
-        name: 'Playoff',
+        name: 'Tournament',
         components: {
-            PlayoffTree
+            TournamentTree
         },
         methods: {
             generateNodes(depth) {

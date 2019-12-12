@@ -18,7 +18,7 @@
 
 <script>
     export default {
-        name: 'PlayoffTree',
+        name: 'TournamentTree',
         props: ['node', 'itemWidth']
     }
 </script>
