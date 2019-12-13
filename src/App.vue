@@ -1,14 +1,14 @@
 <template>
-  <Playoff></Playoff>
+  <Tournament/>
 </template>
 
 <script>
-import Playoff from './components/Playoff.vue'
+import Tournament from './components/Tournament.vue'
 
 export default {
   name: 'app',
   components: {
-    Playoff
+    Tournament
   }
 }
 </script>

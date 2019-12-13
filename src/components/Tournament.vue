@@ -1,6 +1,6 @@
 <template>
-    <div class="playoff">
-        <div class="playoff-top-panel"> 
+    <div class="tournament">
+        <div class="tournament-top-panel"> 
             <label> Bracket size:
                 <input
                     type="text"
@@ -10,12 +10,12 @@
         </div>
         <div
             ref="container"
-            class="playoff-container"
+            class="tournament-container"
             @wheel.prevent="zoom"
             :style="{transform: scaleStyle}">
-            <PlayoffTree 
-                v-if="playoffData"
-                :node="playoffData"
+            <TournamentTree 
+                v-if="tournamentData"
+                :node="tournamentData"
                 :item-width="itemWidth"/>
         </div>
     </div>
@@ -30,17 +30,52 @@
             TournamentTree
         },
         methods: {
-            generateNodes(depth) {
+            generateSingleElimination(depth) {
                 if(isNaN(depth) || depth < 0)
                     return null;
 
-                let node = {};
-                node.name = '';
+                let node = {name: ''};
                 if(depth > 0) {
                     node.children = [];
-                    node.children[0] = this.generateNodes(depth - 1);
-                    node.children[1] = this.generateNodes(depth - 1);
+                    node.children[0] = this.generateSingleElimination(depth - 1);
+                    node.children[1] = this.generateSingleElimination(depth - 1);
                 }
+                return node;
+            },
+
+            generateLoserBracket(depth) {
+                if(isNaN(depth) || depth < 0)
+                    return null;
+
+                let node = { name: '' }; // winner of the major stage
+                if (depth > 0) {
+                    node.children = [];
+                    node.children[0] = {name: ''}; // loser dropped from the corresponding winner round
+                    node.children[1] = {
+                        name: '', // winner of the minor stage
+                        children: [
+                            this.generateLoserBracket(depth - 1),
+                            this.generateLoserBracket(depth - 1)
+                        ]
+                    };
+
+                }
+                
+                return node;
+            },
+
+            generateDoubleElimination(depth) {
+                if(isNaN(depth) || depth < 0)
+                    return null;
+
+                let node =  {
+                    name: '',
+                    children: [
+                        this.generateSingleElimination(this.depth),
+                        this.generateLoserBracket(this.depth - 1)
+                    ]
+                };
+                node.children[1].isLoserBracket = true;
                 return node;
             },
 
@@ -75,14 +110,14 @@
 
         watch: {
             participantCount() {                
-                this.playoffData = this.generateNodes(this.depth);
+                this.tournamentData = this.generateDoubleElimination(this.depth);
             }
         },
 
         data() {
             return {
                 participantCount: 8,
-                playoffData: null,
+                tournamentData: null,
 
                 scaleFactors: [0.2, 0.3, 0.5, 0.75, 1, 1.25, 1.5, 2, 3],
                 scaleIndex: 4
@@ -90,28 +125,28 @@
         },
 
         mounted() {
-            this.playoffData = this.generateNodes(this.depth);
+            this.tournamentData = this.generateSingleElimination(this.depth);
         }
     }
 </script>
 
 <style>
-    .playoff {
+    .tournament {
         padding: 10px;
     }
 
-    .playoff-container {
-        width: 1000px;
+    .tournament-container {
+        /* width: 1000px; */
         transform-origin: 0 0;
     }
 
-    .playoff,
-    .playoff input {
+    .tournament,
+    .tournament input {
         font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
         font-size: 18px;
     }
 
-    .playoff-top-panel {
+    .tournament-top-panel {
         margin-bottom: 10px;
     }
 

@@ -1,46 +1,53 @@
 <template>
-    <div class="playoff-node">
+    <div class="tournament-node" :class="{'loser-bracket': node.isLoserBracket}">
         <ul v-if="node.children">
             <li v-for="(child, index) in node.children" :key="index">
-                <PlayoffTree
+                <TournamentTree
                     :node="child"
                     :item-width="itemWidth"/>
             </li>
         </ul>
-        <!-- <div class="playoff-node-name" :style="{width: itemWidth - 10 + 'px'}">{{ node.name }}</div> -->
+        <!-- <div class="tournament-node-name" :style="{width: itemWidth - 10 + 'px'}">{{ node.name }}</div> -->
         <input 
             type="text"
-            class="playoff-node-name"
-            v-model="node.name"
-            :style="{width: itemWidth - 10 + 'px'}">
+            class="tournament-node-name"
+            v-model="node.name">
     </div>
 </template>
 
 <script>
     export default {
         name: 'TournamentTree',
-        props: ['node', 'itemWidth']
+        props: ['node', 'isLoserBracket', 'itemWidth']
     }
 </script>
 
 <style>
-.playoff-node,
-.playoff-node > ul > li {
+.tournament-node,
+.tournament-node > ul > li {
     position: relative;
     display: flex;
     align-items: center;
     /* background: #eeeeee; */
 }
 
-.playoff-node > ul {
+.tournament-node.loser-bracket {
+    background-color: #ff442222;
+}
+
+.tournament-node > ul > li {
+    justify-content: flex-end;
+}
+
+.tournament-node > ul {
     position: relative;
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
-.playoff-node-name {
-    /* width: 100px; */
+.tournament-node-name {
+    width: 100px;
     height: 25px;
     margin: 10px 5px;
     padding: 3px;
@@ -49,8 +56,8 @@
     border-radius: 5px;
 }
 
-.playoff-node li:first-child::after,
-.playoff-node li:last-child::after{
+.tournament-node li:first-child::after,
+.tournament-node li:last-child::after{
   /* z-index: -5; */
   content: "";
   position: absolute;
@@ -63,13 +70,13 @@
   transform: translate(0, 50%);
 }
 
-.playoff-node li:last-child::after {
+.tournament-node li:last-child::after {
   border-width: 0 1px 1px 0;
   border-radius: 0 0 2px 0;
   transform: translate(0, -50%);
 }
 
-.playoff-node > ul::after {
+.tournament-node > ul::after {
   z-index: -5;
   content: "";
   position: absolute;
